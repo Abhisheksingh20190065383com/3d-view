@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>EMDD — Group 4 — Unit 3 — Smart Glasses</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <h1 class="gradient-text">EMDD</h1>
+      <p class="meta">Group 4 · Unit 3 · Session 2025–26</p>
+      <h2 class="title">3D Model — Smart Glasses</h2>
+      <p class="sub">Interact with the model using the controls below. Click <strong>Load 3D Model</strong> to start.</p>
+      <div class="actions">
+        <button id="loadBtn" class="btn primary">▶ Load 3D Model</button>
+        <a class="btn ghost" id="downloadBtn" href="./emdd-4unit3.glb" download>⬇ Download Model</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="viewer-wrap">
+    <div class="controls glass">
+      <button data-view="front" class="btn small">Front</button>
+      <button data-view="rear" class="btn small">Rear</button>
+      <button data-view="left" class="btn small">Left</button>
+      <button data-view="right" class="btn small">Right</button>
+      <button data-view="top" class="btn small">Top</button>
+      <button data-view="iso" class="btn small">Iso</button>
+      <button data-view="reset" class="btn small">Reset</button>
+      <span class="sep"></span>
+      <button id="fitBtn" class="btn small">Fit</button>
+      <button id="wireBtn" class="btn small">Wireframe</button>
+    </div>
+
+    <div id="canvasHolder" class="canvas-holder hidden" aria-hidden="true"></div>
+    <div id="loader" class="loader hidden" aria-hidden="true"></div>
+    <p id="hint" class="hint hidden">Tip: Drag to rotate • Scroll to zoom • Right-drag to pan</p>
+  </main>
+
+  <footer class="foot glass">
+    <p>Created by Group 4 · EMDD Unit 3 · 2025–26</p>
+  </footer>
+
+<script type="module" src="script.js"></script>
+</body>
+</html>

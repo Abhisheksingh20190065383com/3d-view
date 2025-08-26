@@ -1,0 +1,26 @@
+
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg1:#081025;--bg2:#0c1228;--neon1:#00e0ff;--neon2:#7f00ff;--muted:#9fb3c8;--card:rgba(255,255,255,0.04)}
+body{font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:radial-gradient(800px 400px at 10% 10%,var(--bg2),var(--bg1));color:#eef4ff;min-height:100vh}
+.hero{padding:44px 20px 12px;text-align:center}
+.hero-inner{max-width:980px;margin:0 auto;padding:26px;border-radius:20px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));box-shadow:0 12px 50px rgba(0,0,0,0.6)}
+.gradient-text{font-size:52px;font-weight:900;background:linear-gradient(90deg,var(--neon1),var(--neon2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:0.06em}
+.meta{color:var(--muted);margin-top:6px;font-size:15px}
+.title{font-size:28px;margin-top:6px;font-weight:600}
+.sub{color:#b7c8e0;margin-top:10px;max-width:720px;margin-left:auto;margin-right:auto}
+.actions{margin-top:18px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;border-radius:12px;padding:10px 14px;font-size:15px;border:none;cursor:pointer;transition:transform .17s ease,box-shadow .17s ease;text-decoration:none;color:#fff}
+.btn.primary{background:linear-gradient(135deg,#007bff,#00e0ff);box-shadow:0 8px 24px rgba(0,192,255,0.18)}
+.btn.primary:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(0,192,255,0.24)}
+.btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.08);padding:9px 12px}
+.viewer-wrap{max-width:1100px;margin:20px auto;padding:0 16px}
+.controls{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:12px;padding:10px;border-radius:14px}
+.glass{background:var(--card);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.03)}
+.sep{width:1px;height:26px;background:rgba(255,255,255,0.06);display:inline-block;margin:0 6px}
+.canvas-holder{width:100%;height:66vh;border-radius:18px;border:2px solid rgba(127,0,255,0.15);box-shadow:0 30px 80px rgba(0,0,0,0.6);overflow:hidden;position:relative}
+.hidden{display:none}
+.hint{text-align:center;color:var(--muted);margin-top:10px}
+.foot{margin-top:36px;text-align:center;padding:18px;font-size:14px;color:#aab8d6}
+.loader{width:64px;height:64px;border-radius:50%;border:6px solid rgba(255,255,255,0.08);border-top-color:var(--neon1);margin:18px auto;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}} 
+@media(max-width:640px){.gradient-text{font-size:36px}.title{font-size:20px}.canvas-holder{height:58vh}}
