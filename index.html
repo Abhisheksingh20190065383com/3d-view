@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GLB Studio (Model-Viewer)</title>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <style>
+    :root {
+      --bg1:#0f1220; --bg2:#0a0d18;
+      --panel:#1b2032; --panel-2:#161b2a;
+      --text:#e9eefb; --muted:#a7b0c7;
+      --accent: linear-gradient(90deg,#66e0ff,#6a7bff);
+      --btn:#2a3553; --btnHover:#344066; --ring:#6a7bff44;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+    .light {
+      --bg1:#f6f8ff; --bg2:#ffffff;
+      --panel:#eef2ff; --panel-2:#e7ebff;
+      --text:#111633; --muted:#5b668c;
+      --btn:#dbe2ff; --btnHover:#cdd6ff; --ring:#5b6cff33;
+      --shadow: 0 10px 25px rgba(70,80,140,.15);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family: ui-sans-serif,system-ui,Segoe UI,Roboto,Arial;
+      background: linear-gradient(180deg,var(--bg1),var(--bg2));
+      color:var(--text);
+    }
+    .wrap{max-width:1250px;margin:28px auto;padding:0 18px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+    .brand{display:flex;align-items:center;gap:10px}
+    .brand .logo{width:34px;height:34px;border-radius:10px;background:var(--accent);box-shadow:var(--shadow)}
+    .brand h1{font-size:22px;margin:0}
+    .brand span{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+    .actions{display:flex;gap:10px}
+    .btn{background:var(--btn);color:var(--text);border:0;padding:10px 14px;
+      border-radius:10px;cursor:pointer;box-shadow:var(--shadow);transition:.2s}
+    .btn:hover{background:var(--btnHover)}
+    .btn.accent{background:var(--accent);color:#0b1025;font-weight:600}
+    .grid{display:grid;grid-template-columns:1.4fr .9fr;gap:18px}
+    .panel{background:linear-gradient(180deg,var(--panel),var(--panel-2));
+      border-radius:16px;box-shadow:var(--shadow);padding:14px}
+    .panel h3{margin:0 0 10px;font-size:15px;color:var(--muted);font-weight:600}
+    .preview{height:66vh;min-height:420px;position:relative;overflow:hidden;
+      border-radius:14px;background:#0b0f1a;border:1px solid #2a3250}
+    model-viewer{width:100%;height:100%;background:#0b0f1a}
+    .toolbar{position:absolute;left:14px;right:14px;bottom:14px;
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+      background:rgba(20,24,40,.65);backdrop-filter: blur(8px);
+      border:1px solid #2b3558;border-radius:12px;padding:10px}
+    .chipbar{display:flex;gap:8px;flex-wrap:wrap}
+    .chip{background:#232a45;color:#d6defa;border:1px solid #2e385f;
+      padding:8px 12px;border-radius:999px;font-size:12px;cursor:pointer}
+    .sidebar .section{margin-bottom:14px}
+    .dropzone{border:2px dashed #33406d;border-radius:12px;padding:14px;text-align:center;
+      background:rgba(18,22,40,.35)}
+    .dropzone label {
+      display: inline-block;
+      margin-top: 10px;
+    }
+    .muted{color:var(--muted);font-size:12px}
+    input[type="file"]{display:none}
+    .footer-note{color:var(--muted);font-size:12px;margin-top:6px}
+
+    /* Toggle switch styles */
+    .toggle-switch {
+      position: relative;
+      width: 40px;
+      height: 20px;
+      display: inline-block;
+      margin-left: 8px;
+      vertical-align: middle;
+      cursor: pointer;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #ccc;
+      border-radius: 20px;
+      transition: 0.3s;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 2px;
+      bottom: 2px;
+      background-color: white;
+      border-radius: 50%;
+      transition: 0.3s;
+    }
+
+    .toggle-switch input:checked + .slider {
+      background-color: #6a7bff;
+    }
+
+    .toggle-switch input:checked + .slider:before {
+      transform: translateX(20px);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo"></div>
+        <div>
+          <h1>GLB Studio</h1>
+          <span>Premium GLB/GLTF Viewer</span>
+        </div>
+      </div>
+      <div class="actions">
+        <label class="btn accent" for="fileInput">Upload Model</label>
+        <button id="themeBtn" class="btn">Toggle Theme</button>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- LEFT: PREVIEW -->
+      <div class="panel">
+        <h3>Preview <span class="muted">Drag & drop • .glb</span></h3>
+        <div id="preview" class="preview">
+          <model-viewer id="viewer" camera-controls auto-rotate shadow-intensity="1" exposure="1" auto-rotate-speed="0.0555"></model-viewer>
+          <div class="toolbar">
+            <div class="chipbar" style="align-items:center; gap:12px;">
+              <button id="resetBtn" class="chip">Reset</button>
+              <div class="chip" style="display:flex; align-items:center; gap:8px; user-select:none;">
+                Auto Rotate
+                <label class="toggle-switch">
+                  <input type="checkbox" id="autoRotateToggle" checked />
+                  <span class="slider"></span>
+                </label>
+              </div>
+            </div>
+            <div class="chipbar">
+              <button id="fullBtn" class="btn">⤢ Fullscreen</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: SIDEBAR -->
+      <div class="panel sidebar">
+        <div class="section">
+          <h3>Upload <span class="muted">.glb only</span></h3>
+          <div id="drop" class="dropzone">
+            <div class="muted">Drop model here or click to choose</div>
+            <label class="btn accent" for="fileInput">Choose File</label>
+          </div>
+          <input id="fileInput" type="file" accept=".glb" />
+        </div>
+
+        <div class="section panel">
+          <h3>Info</h3>
+          <div id="info" class="muted">No model loaded</div>
+        </div>
+
+        <div class="section panel">
+          <h3>Notes</h3>
+          <div class="footer-note">Made with model-viewer • Premium UI</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const viewer = document.getElementById('viewer');
+    const resetBtn = document.getElementById('resetBtn');
+    const fullBtn = document.getElementById('fullBtn');
+    const info = document.getElementById('info');
+    const themeBtn = document.getElementById('themeBtn');
+    const autoRotateToggle = document.getElementById('autoRotateToggle');
+
+    // Upload file
+    fileInput.addEventListener('change', (event) => {
+      const file = event.target.files[0];
+      if (file && file.name.endsWith('.glb')) {
+        const url = URL.createObjectURL(file);
+        viewer.src = url;
+        info.textContent = file.name;
+      } else {
+        alert('Please upload a valid .glb file');
+      }
+    });
+
+    // Drag & drop
+    const drop = document.getElementById('drop');
+    ;['dragover','dragenter'].forEach(ev => drop.addEventListener(ev, e => {
+      e.preventDefault();
+      drop.style.borderColor = "#6a7bff";
+    }));
+    ;['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e => {
+      e.preventDefault();
+      drop.style.borderColor = "#33406d";
+    }));
+    drop.addEventListener('drop', e => {
+      e.preventDefault();
+      if (e.dataTransfer.files.length) {
+        fileInput.files = e.dataTransfer.files;
+        fileInput.dispatchEvent(new Event('change'));
+      }
+    });
+
+    // Auto rotate toggle function
+    function setAutoRotate(on) {
+      if (on) {
+        viewer.setAttribute('auto-rotate', '');
+        viewer.setAttribute('auto-rotate-speed', '0.0555'); // 20deg/s
+      } else {
+        viewer.removeAttribute('auto-rotate');
+        viewer.removeAttribute('auto-rotate-speed');
+      }
+    }
+
+    // Initialize auto-rotate based on toggle state
+    setAutoRotate(autoRotateToggle.checked);
+
+    autoRotateToggle.addEventListener('change', () => {
+      setAutoRotate(autoRotateToggle.checked);
+    });
+
+    // Reset camera orbit
+    resetBtn.addEventListener('click', () => {
+      viewer.cameraOrbit = '0deg 75deg auto';
+    });
+
+    // Fullscreen toggle with error handling
+    fullBtn.addEventListener('click', async () => {
+      const el = document.getElementById("preview");
+      try {
+        if (!document.fullscreenElement) {
+          await el.requestFullscreen();
+        } else {
+          await document.exitFullscreen();
+        }
+      } catch (err) {
+        console.error('Fullscreen API error:', err);
+      }
+    });
+
+    // Theme toggle
+    themeBtn.addEventListener('click', () => {
+      document.body.classList.toggle('light');
+    });
+  </script>
+</body>
+</html>
